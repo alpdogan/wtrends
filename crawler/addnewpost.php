@@ -11,7 +11,7 @@ $post_id = -1;
 $author_id = 1;
 $slug =  	$_GET['slug'];
 $title = 	$_GET['title'];
-$videoid = 	$_GET['videoid'];
+$videoid = 	$_GET['id'];
 // If the page doesn't already exist, then create it
 if( null == get_page_by_title( $title ) ) {
 
@@ -21,7 +21,7 @@ if( null == get_page_by_title( $title ) ) {
 			'comment_status'	=>	'closed',
 			'ping_status'		=>	'closed',
 			'post_author'		=>	$author_id,
-			'post_name'		=>	$slug,
+			//'post_name'		=>	$slug,
 			'post_title'		=>	$title,
 			'post_status'		=>	'draft',
 			'post_type'		=>	'post'

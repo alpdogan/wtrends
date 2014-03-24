@@ -2,15 +2,17 @@
 Contributors: sutherlandboswell
 Donate link: http://wie.ly/u/donate
 Tags: Video, Thumbnails, YouTube, Vimeo, Vine, Twitch, Dailymotion, Youku, Rutube, Featured Image
-Requires at least: 3.1
-Tested up to: 3.8
-Stable tag: 2.4.2
+Requires at least: 3.2
+Tested up to: 3.8.1
+Stable tag: 2.6.3
 
 Video Thumbnails simplifies the process of automatically displaying video thumbnails in your WordPress template.
 
 == Description ==
 
 Video Thumbnails makes it easy to automatically display video thumbnails in your template. When you publish a post, this plugin will find the first video embedded and locate the thumbnail for you. Thumbnails can be saved to your media library and set as a featured image automatically. There's even support for custom post types and custom fields!
+
+**New!** [Video Thumbnails Pro](https://refactored.co/plugins/video-thumbnails) gives you even more power. Enjoy features like maximum image sizes, more powerful bulk scanning options, a customizable upload directory, and more!
 
 Video Thumbnails currently supports these video services:
 
@@ -22,6 +24,7 @@ Video Thumbnails currently supports these video services:
 * Twitch
 * Dailymotion
 * Metacafe
+* VK
 * Blip
 * Google Drive
 * Funny or Die
@@ -34,11 +37,11 @@ Video Thumbnails currently supports these video services:
 Video Thumbnails even works with most video embedding plugins, including:
 
 * [Refactored Video Importer](https://refactored.co/plugins/video-importer)
-* [Viper's Video Quicktags](http://wordpress.org/extend/plugins/vipers-video-quicktags/)
-* [Automatic Youtube Video Posts Plugin](http://wordpress.org/extend/plugins/automatic-youtube-video-posts/)
-* [Simple Video Embedder](http://wordpress.org/extend/plugins/simple-video-embedder/)
-* [Vimeo Shortcode](http://blog.esimplestudios.com/2010/08/embedding-vimeo-videos-in-wordpress/)
-* [WP YouTube Lyte](http://wordpress.org/extend/plugins/wp-youtube-lyte/)
+* Viper's Video Quicktags
+* Automatic Youtube Video Posts Plugin
+* WP YouTube Lyte
+
+Video Thumbnails will always be totally free while remaining a full-featured plugin, but if you'd like to support the developer consider purchasing [Video Thumbnails Pro](https://refactored.co/plugins/video-thumbnails). The pro version runs alongside the standard version and adds additional features like maximum image sizes, more powerful bulk scanning options, a customizable upload directory, and more!
 
 Some functions are available to advanced users who want to customize their theme:
 
@@ -61,6 +64,10 @@ Some functions are available to advanced users who want to customize their theme
 1. Try posting a video from other sources to help narrow down the problem.
 1. Check the support threads to see if anyone has had the same issue.
 1. If you are still unable to resolve the problem, start a thread with a good descriptive title ("Error" or "No thumbnails" is a bad title) and be sure to include the results of your testing as well. Also be sure to include the name of your theme, any video plugins you're using, and any other details you can think of.
+
+= Can I get thumbnails from a specific time? =
+
+No, Video Thumbnails only uses thumbnails provided by the source. If you're posting videos from your own account, many providers allow you to choose the thumbnail.
 
 = My theme isn't showing thumbnails, what's wrong? =
 
@@ -110,6 +117,37 @@ The Vimeo API has a rate limit, so in rare cases you may exceed this limit. Try 
 1. Settings page
 
 == Changelog ==
+
+= 2.6.3 =
+* Better Google Drive detection (added support for underscores or dashes in the ID)
+
+= 2.6.2 =
+* Added feature to settings page that automatically detects the custom field
+* Switched to JSON for Vimeo's oEmbed endpoint
+* Added support for the "image/gif" MIME type
+
+= 2.6.1 =
+* Fixed VK bug caused by IDs with a negative int
+
+= 2.6 =
+* Added support for VK iFrame embeds
+* Minor bugfixes and improvements
+
+= 2.5.3 =
+* Fixed bug with Automatic YouTube Video Posts when automatic publishing is disabled or when rescanning existing posts
+* Fixed bug with bulk scanner when 0 posts are queued
+* Improved markup test by checking if server can reach the resulting thumbnail URL
+
+= 2.5.2 =
+* Better support for Automatic YouTube Video Posts
+* Added support tab to settings page
+
+= 2.5.1 =
+* Fixed improper error handling
+
+= 2.5 =
+* Added support for [Video Thumbnails Pro](https://refactored.co/plugins/video-thumbnails), our new solution for power users and professional bloggers
+* Various bugfixes and improvements
 
 = 2.4.2 =
 * Fixed bug with image download test

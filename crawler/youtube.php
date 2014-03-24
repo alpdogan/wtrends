@@ -91,7 +91,7 @@
 
 		    $headers = array( "Authorization: GoogleLogin auth=".$authvalue,
 		                 "GData-Version: 2",
-		                 "X-GData-Key: key=".$key,
+		                 "X-GData-Key: key=".$this->key,
 		                 "Content-length: ".strlen( $data ),
 		                 "Content-Type: application/atom+xml; charset=UTF-8" );
 

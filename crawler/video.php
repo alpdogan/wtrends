@@ -27,12 +27,12 @@ $facebook->setAccessToken(ACCESSTOKEN);
 
 $page = $_GET['page'];
 
-$result = $facebook->api('/'.$page.'?fields=name,id,likes,posts.limit(10).fields(caption,type,description,actions,created_time,status_type,likes,comments.fields(from,message,like_count))', 'get', array('access_token'=>ACCESSTOKEN));
+$result = $facebook->api('/'.$page.'?fields=name,id,likes,posts.limit(100).fields(caption,type,description,actions,created_time,status_type,likes,comments.fields(from,message,like_count))', 'get', array('access_token'=>ACCESSTOKEN));
 
 ?>
 	<header id="top-nav" style="top: 0px;position: fixed;z-index: 3;">
         <div id="logo">
-            <a href="@Url.Action("Index","Home")">Komikli</a>
+            <a href="/">Komikli</a>
         </div>
 	            
  	</header>
@@ -57,8 +57,8 @@ foreach ($result["posts"]["data"] as $post) {
  ?>
 		
     <div id="list-item">
-        <input type="text" class="list-item-title" name="<?php GetInputName($id,"title") ?>" style="width:100%" value="<?php echo $title ?>"/>
-        <input type="text" class="list-item-title" name="<?php GetInputName($id,"description") ?>" style="width:100%" value="<?php echo $description ?>"/>
+        <input type="text" class="list-item-title" id="<?php GetInputName($id,"title") ?>" style="width:100%" value="<?php echo $title ?>"/>
+        <input type="text" class="list-item-title" id="<?php GetInputName($id,"description") ?>" style="width:100%" value="<?php echo $description ?>"/>
         <div class="list-item-content">
             <div id='<?php echo $id ?>'></div>
             <script type='text/javascript'>
@@ -84,7 +84,7 @@ foreach ($result["posts"]["data"] as $post) {
             	<input id="<?php GetInputName($id,"source") ?>" value="<?php echo $source ?>"	type="hidden"></input>
             	<input id="<?php GetInputName($id,"picture") ?>" value="<?php echo $picture ?>"	type="hidden"></input>
             	<input id="<?php GetInputName($id,"page") ?>" value="<?php echo $page ?>"		type="hidden"></input>
-                <button class="addToSite" data-contentid="@item.ContentId">Youtube'a at</button>
+                <button class="addToSite" data-contentid="<?php echo $id ?>">Youtube'a at</button>
             </div>
         </div>
     </div>
@@ -93,6 +93,31 @@ foreach ($result["posts"]["data"] as $post) {
 }
 ?>
 	</div>
+
+
+<script type="text/javascript">
+    $(function(){
+        $(".addToSite").click(function(){
+            var that = $(this);
+            var contentId = $(this).data("contentid");
+            var sourceUrl = $("#"+contentId+"-source").val();
+            var title = $("#"+contentId+"-title").val();
+            var description = $("#"+contentId+"-description").val();
+            console.log(contentId);
+            $.ajax({
+                type: "post",
+                url : "upload.php",
+                data : {  title: title, description: description, source: sourceUrl  },
+                success: function(result){
+                    that.parent().parent().parent().hide();
+                }
+            });    
+            //http://localhost:8888/wtrends/crawler/upload.php?title=asdassssssd&description=asdassssssd&source=https://scontent.xx.fbcdn.net/hvideo-ash3/v/t42.1790-2/1554690_813167315364262_579721247_n.mp4?oh=31230e7dd618b25f9ac183d22cb20a3d&oe=5332A024
+        });
+        
+    });
+
+</script>
 </body>
 </html>
 
@@ -103,3 +128,5 @@ function GetInputName($contentId,$inputName)
 	echo $contentId."-".$inputName;
 }
 ?>
+
+

@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Video Thumbnails
-Plugin URI: http://refactored.co/plugins/video-thumbnails
-Description: Automatically retrieve video thumbnails for your posts and display them in your theme. Supports YouTube, Vimeo, Facebook, Vine, Justin.tv, Twitch, Dailymotion, Metacafe, Blip, Google Drive, Funny or Die, CollegeHumor, MPORA, Wistia, Youku, and Rutube.
+Plugin URI: https://refactored.co/plugins/video-thumbnails
+Description: Automatically retrieve video thumbnails for your posts and display them in your theme. Supports YouTube, Vimeo, Facebook, Vine, Justin.tv, Twitch, Dailymotion, Metacafe, VK, Blip, Google Drive, Funny or Die, CollegeHumor, MPORA, Wistia, Youku, and Rutube.
 Author: Sutherland Boswell
 Author URI: http://sutherlandboswell.com
-Version: 2.4.2
+Version: 2.6.3
 License: GPL2
 */
 /*  Copyright 2014 Sutherland Boswell  (email : sutherland.boswell@gmail.com)
@@ -28,7 +28,7 @@ License: GPL2
 
 define( 'VIDEO_THUMBNAILS_PATH', dirname(__FILE__) );
 define( 'VIDEO_THUMBNAILS_FIELD', '_video_thumbnail' );
-define( 'VIDEO_THUMBNAILS_VERSION', '2.4.2' );
+define( 'VIDEO_THUMBNAILS_VERSION', '2.6.3' );
 
 // Providers
 require_once( VIDEO_THUMBNAILS_PATH . '/php/providers/class-video-thumbnails-providers.php' );
@@ -116,16 +116,7 @@ class Video_Thumbnails {
 		?>
 		<div id="video-thumbnail-not-found-troubleshooting" style="display:none;">
 			<h2><?php _e( 'Troubleshooting Video Thumbnails' ); ?></h2>
-			<h3>No video thumbnail for this post</h3>
-			<ol>
-				<li>Ensure you have saved any changes to your post.</li>
-				<li>If you are using a a plugin or theme that stores videos in a special location other than the main post content area, be sure you've entered the correct custom field on the <a href="<?php echo admin_url( 'options-general.php?page=video_thumbnails' ); ?>">settings page</a>. If you don't know the name of the field your video is being saved in, please contact the developer of that theme or plugin.</li>
-				<li>Copy and paste your embed code into the "Test Markup for Video" section of the <a href="<?php echo admin_url( 'options-general.php?page=video_thumbnails&tab=debugging' ); ?>">Debugging page</a>. If this doesn't find the thumbnail, you'll want to be sure to include the embed code you scanned when you request support. If it does find a thumbnail, please double check that you have the Custom Field set correctly in the <a href="<?php echo admin_url( 'options-general.php?page=video_thumbnails' ); ?>">settings page</a> if you are using a a plugin or theme that stores videos in a special location.</li>
-				<li>Go to the <a href="<?php echo admin_url( 'options-general.php?page=video_thumbnails&tab=debugging' ); ?>">Debugging page</a> and click "Test Image Downloading" to test your server's ability to save an image from a video source.</li>
-				<li>Try posting a video from other sources to help narrow down the problem.</li>
-				<li>Check the <a href="http://wordpress.org/support/plugin/video-thumbnails">support threads</a> to see if anyone has had the same issue.</li>
-				<li>If you are still unable to resolve the problem, <a href="http://wordpress.org/support/plugin/video-thumbnails">start a thread</a> with a good descriptive title ("Error" or "No thumbnails" is a bad title) and be sure to include the results of your testing as well. Also be sure to include the name of your theme, any video plugins you're using, and any other details you can think of.</li>
-			</ol>
+			<?php $this->no_video_thumbnail_troubleshooting_instructions(); ?>
 		</div>
 		<?php
 		$custom = get_post_custom( $post->ID );
@@ -148,6 +139,24 @@ class Video_Thumbnails {
 				echo '<p>A video thumbnail will be found for this post when it is published.</p>';
 			}
 		}
+	}
+
+	/**
+	 * Prints a guide for troubleshooting no video thumbnails
+	 */
+	public static function no_video_thumbnail_troubleshooting_instructions() {
+		?>
+		<h3>Fixing "No video thumbnail for this post"</h3>
+		<ol>
+			<li>Ensure you have saved any changes to your post.</li>
+			<li>If you are using a a plugin or theme that stores videos in a special location other than the main post content area, be sure you've entered the correct custom field on the <a href="<?php echo admin_url( 'options-general.php?page=video_thumbnails' ); ?>">settings page</a>. If you don't know the name of the field your video is being saved in, please contact the developer of that theme or plugin.</li>
+			<li>Copy and paste your embed code into the "Test Markup for Video" section of the <a href="<?php echo admin_url( 'options-general.php?page=video_thumbnails&tab=debugging' ); ?>">Debugging page</a>. If this doesn't find the thumbnail, you'll want to be sure to include the embed code you scanned when you request support. If it does find a thumbnail, please double check that you have the Custom Field set correctly in the <a href="<?php echo admin_url( 'options-general.php?page=video_thumbnails' ); ?>">settings page</a> if you are using a a plugin or theme that stores videos in a special location.</li>
+			<li>Go to the <a href="<?php echo admin_url( 'options-general.php?page=video_thumbnails&tab=debugging' ); ?>">Debugging page</a> and click "Test Image Downloading" to test your server's ability to save an image from a video source.</li>
+			<li>Try posting a video from other sources to help narrow down the problem.</li>
+			<li>Search the <a href="http://wordpress.org/support/plugin/video-thumbnails">support threads</a> to see if anyone has had the same issue.</li>
+			<li>If you are still unable to resolve the problem, <a href="http://wordpress.org/support/plugin/video-thumbnails">start a thread</a> with a <strong>good descriptive</strong> title ("Error" or "No thumbnails" is a <strong>bad</strong> title) and be sure to include the results of your testing as well. Also be sure to include the <strong>name of your theme</strong>, any <strong>video plugins</strong> you're using, and any other details you can think of.</li>
+		</ol>
+		<?php
 	}
 
 	/**
@@ -240,7 +249,7 @@ class Video_Thumbnails {
 			}
 
 			// Return the new thumbnail variable and update meta if one is found
-			if ( $new_thumbnail != null ) {
+			if ( $new_thumbnail != null && !is_wp_error( $new_thumbnail ) ) {
 
 				// Save as Attachment if enabled
 				if ( $this->settings->options['save_media'] == 1 ) {
@@ -260,6 +269,7 @@ class Video_Thumbnails {
 					}
 				}
 			}
+
 			return $new_thumbnail;
 
 		}
@@ -300,7 +310,7 @@ class Video_Thumbnails {
 	}
 
 	// Saves to media library
-	public function save_to_media_library( $image_url, $post_id ) {
+	public static function save_to_media_library( $image_url, $post_id ) {
 
 		$error = '';
 		$response = wp_remote_get( $image_url, array( 'sslverify' => false ) );
@@ -316,20 +326,31 @@ class Video_Thumbnails {
 		} else {
 
 			// Translate MIME type into an extension
-			if ( $image_type == 'image/jpeg' ) $image_extension = '.jpg';
-			elseif ( $image_type == 'image/png' ) $image_extension = '.png';
+			if ( $image_type == 'image/jpeg' ) {
+				$image_extension = '.jpg';
+			} elseif ( $image_type == 'image/png' ) {
+				$image_extension = '.png';
+			} elseif ( $image_type == 'image/gif' ) {
+				$image_extension = '.gif';
+			} else {
+				return new WP_Error( 'thumbnail_upload', __( 'Unsupported MIME type:' ) . ' ' . $image_type );
+			}
 
 			// Construct a file name with extension
 			$new_filename = self::construct_filename( $post_id ) . $image_extension;
 
 			// Save the image bits using the new filename
+			do_action( 'video_thumbnails/pre_upload_bits', $image_contents );
 			$upload = wp_upload_bits( $new_filename, null, $image_contents );
+			do_action( 'video_thumbnails/after_upload_bits', $upload );
 
 			// Stop for any errors while saving the data or else continue adding the image to the media library
 			if ( $upload['error'] ) {
 				$error = new WP_Error( 'thumbnail_upload', __( 'Error uploading image data:' ) . ' ' . $upload['error'] );
 				return $error;
 			} else {
+
+				do_action( 'video_thumbnails/image_downloaded', $upload['file'] );
 
 				$image_url = $upload['url'];
 
@@ -399,11 +420,18 @@ class Video_Thumbnails {
 	}
 
 	function bulk_posts_query_callback() {
+		// Some default args
 		$args = array(
-			'showposts' => -1,
+			'posts_per_page' => -1,
 			'post_type' => $this->settings->options['post_types'],
 			'fields'    => 'ids'
 		);
+		// Setup an array for any form data and parse the jQuery serialized data
+		$form_data = array();
+		parse_str( $_POST['params'], $form_data );
+
+		$args = apply_filters( 'video_thumbnails/bulk_posts_query', $args, $form_data );
+
 		$query = new WP_Query( $args );
 		echo json_encode( $query->posts );
 		die();
@@ -450,7 +478,19 @@ class Video_Thumbnails {
 
 			<p>Use this tool to scan all of your posts for Video Thumbnails.</p>
 
-			<p><a id="video-thumbnails-scan-all-posts" href="#" class="button button-primary">Scan All Posts</a></p>
+			<form id="video-thumbnails-bulk-scan-options">
+				<table class="form-table">
+					<tbody>
+						<?php do_action( 'video_thumbnails/bulk_options_form'); ?>
+						<tr valign="top">
+							<th scope="row"><span id="queue-count">...</span></th>
+							<td>
+								<input type="submit" value="Scan Now" class="button button-primary">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</form>
 
 			<div id="vt-bulk-scan-results">
 				<div class="progress-bar-container">

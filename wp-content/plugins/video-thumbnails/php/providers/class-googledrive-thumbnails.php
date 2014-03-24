@@ -46,9 +46,9 @@ class GoogleDrive_Thumbnails extends Video_Thumbnails_Providers {
 
 	// Regex strings
 	public $regexes = array(
-		'#(?:https?:)?//docs\.google\.com/(?:a/[^/]+/)?file/d/([A-Za-z0-9]+)/preview#', // iFrame URL
-		'#(?:https?:)?//video\.google\.com/get_player\?docid=([A-Za-z0-9]+)#', // Flash URL
-		'#<param value="(?:[^"]+)?docid=([A-Za-z0-9]+)(?:[^"]+)?" name="flashvars">#', // Flash (YouTube player)
+		'#(?:https?:)?//docs\.google\.com/(?:a/[^/]+/)?file/d/([A-Za-z0-9\-_]+)/preview#', // iFrame URL
+		'#(?:https?:)?//video\.google\.com/get_player\?docid=([A-Za-z0-9\-_]+)#', // Flash URL
+		'#<param value="(?:[^"]+)?docid=([A-Za-z0-9\-_]+)(?:[^"]+)?" name="flashvars">#', // Flash (YouTube player)
 	);
 
 	// Thumbnail URL
@@ -67,7 +67,7 @@ class GoogleDrive_Thumbnails extends Video_Thumbnails_Providers {
 				$result = str_replace( '=s220', '=s480', $result );
 			}
 		} else {
-			$result = new WP_Error( 'googledrive_api_key', __( 'You must enter an API key to retrieve thumbnails from Google Drive' ) );
+			$result = new WP_Error( 'googledrive_api_key', __( 'You must enter an API key in the <a href="' . admin_url( 'options-general.php?page=video_thumbnails&tab=provider_settings' ) . '">provider settings</a> to retrieve thumbnails from Google Drive.' ) );
 		}
 		return $result;
 	}
